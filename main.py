@@ -42,6 +42,9 @@ def decrypt():
 
     return jsonify({'decrypted_text': decrypted_text})
 
-
+#local
+# if __name__ == "__main__":
+#     app.run(debug=True)
+#online
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=False,host='0.0.0.0')
