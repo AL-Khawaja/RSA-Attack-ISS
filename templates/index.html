@@ -3,242 +3,37 @@
 <head>
     <title>Generate RSA</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-
-        h2 {
-            display: fixed;
-        }
-
-        form {
-            max-width: 400px;
-            margin: 0;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 5px;
-            text-align: left;
-        }
-
-        input {
-            width: 100%;
-            padding: 8px;
-            margin-bottom: 10px;
-            border-radius: 4px;
-            border: 1px solid #ccc;
-        }
-
-        .encrypt-button {
-            width: 20%;
-        }
-
-        .decrypt-button {
-            width: 20%;
-        }
-
-        button {
-            width: 100%;
-            padding: 10px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            cursor: pointer;
-            border-radius: 4px;
-        }
-
-        button:disabled {
-            background-color: #ccc;
-            cursor: not-allowed;
-        }
-
-        button:hover {
-            background-color: #45a049;
-        }
-
-        .result-label {
-            font-weight: bold;
-            margin-top: 10px;
-        }
-
-        .result-value {
-            display: block;
-            margin-top: 5px;
-        }
-
-        .line-break {
-            margin-top: 10px;
-        }
-
-        .reset-button {
-            width: 30px;
-            height: 30px;
-            padding: 0;
-            background-color: transparent;
-            border: none;
-            cursor: pointer;
-        }
-
-        .reset-icon {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-        }
-    </style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script>
-            function resetForm() {
-                // Remove generated content
-                $('.label, .result-label, .result-value, br, form:gt(0), .encrypt-button, .decrypt-button').remove();
-
-                // Reset form inputs
-                $('form')[0].reset();
-
-                // Enable the generate button
-                $('#generate-button').prop('disabled', false);
-            }
-
-        function isPrime(num) {
-            if (num < 2) {
-                return false;
-            }
-            for (let i = 2; i <= Math.sqrt(num); i++) {
-                if (num % i === 0) {
-                    return false;
-                }
-            }
-            return true;
-        }
-
-        function gcd(a, b) {
-            if (b === 0) {
-                return a;
-            }
-            return gcd(b, a % b);
-        }
-
-        function createLabelAndInput() {
-            // Disable the button
-            $('#generate-button').prop('disabled', true);
-
-            var p = parseInt($('#p').val());
-            var q = parseInt($('#q').val());
-            var e = parseInt($('#e').val());
-
-            if(p==q){
-                alert("P and Q cannot be equal to each other");
-
-                // Re-enable the generate button
-                $('#generate-button').prop('disabled', false);
-                return;
-            }
-
-            if(p < 43 || q < 43 || e <43){
-                alert("Choose larger prime numbers");
-
-                // Re-enable the generate button
-                $('#generate-button').prop('disabled', false);
-                return;
-            }
-
-            /*if (!isPrime(p) || !isPrime(q) || !isPrime(e) || gcd(e, p * q) !== 1n || p === q) {
-                    alert("P, Q, and E must be prime numbers, E must be coprime with (P * Q), and P must not be equal to Q.");
-
-                    // Re-enable the button
-                    $('#generate-button').prop('disabled', false);
-                    return;
-            }*/
-
-            $.ajax({
-                type: 'POST',
-                url: '/generate',
-                data: $('form').serialize(),
-                success: function(data) {
-                    var public_key_label = $("<label>", { text: "Public Key:" , class: "label"});
-                    var public_key_value = $("<span>", { text: data.public_key, class: "result-value" });
-                    var private_key_label = $("<label>", { text: "Private Key:" , class: "label"});
-                    var private_key_value = $("<span>", { text: data.private_key, class: "result-value" });
-                    var lineBreak = $("<br>");
-                    var lineBreak2 = $("<br>");
-
-                    $("body").append(public_key_label, public_key_value, lineBreak, private_key_label, private_key_value, lineBreak);
-
-                    // Create the new form for encryption
-                    var encryptionForm = $("<form>");
-                    var inputLabel = $("<label>", { text: "Text to Encrypt:" });
-                    var inputField = $("<input>", { type: "text", name: "text" });
-                    encryptionForm.append(inputLabel, inputField);
-
-                    // Create the "Encrypt" button
-                    var encryptButton = $("<button>", { type: "button", text: "Encrypt", class: "encrypt-button" });
-                    encryptButton.on("click", function() {
-                        $.ajax({
-                            type: 'POST',
-                            url: '/encrypt',
-                            data: encryptionForm.serialize(),
-                            success: function(data) {
-                                var resultLabel = $("<label>", { text: "Encrypted Text:", class: "result-label" });
-                                var resultValue = $("<span>", { text: data.encrypted_text, class: "result-value" });
-                                var lineBreak = $("<br>");
-
-                                $("body").append(resultLabel, resultValue, lineBreak);
-
-                                // Create the new form for decryption
-                                var decryptionForm = $("<form>");
-                                var decryptionLabel = $("<label>", { text: "Encrypted Text to Decrypt:" });
-                                var decryptionField = $("<input>", { type: "text", name: "encrypted_text" });
-                                decryptionForm.append(decryptionLabel, decryptionField);
-
-                                // Create the "Decrypt" button
-                                var decryptButton = $("<button>", { type: "button", text: "Decrypt", class: "decrypt-button" });
-                                decryptButton.on("click", function() {
-                                    $.ajax({
-                                        type: 'POST',
-                                        url: '/decrypt',
-                                        data: decryptionForm.serialize(),
-                                        success: function(data) {
-                                            var decryptedLabel = $("<label>", { text: "Decrypted Text:", class: "result-label" });
-                                            var decryptedValue = $("<span>", { text: data.decrypted_text, class: "result-value" });
-                                            var lineBreak2 = $("<br>");
-
-                                            $("body").append(decryptedLabel, decryptedValue, lineBreak2);
-                                        }
-                                    });
-                                });
-
-                                var lineBreak3 = $("<br>");
-
-                                // Append the decryption form and button
-                                $("body").append(decryptionForm, decryptButton, lineBreak3);
-                            }
-                        });
-                    });
-
-                    // Append the encryption form and button
-                    $("body").append(encryptionForm, encryptButton, lineBreak2);
-                }
-            });
-        }
-    </script>
 </head>
 <body>
-    <h2>
-        Generate RSA
-        <button type="button" class="reset-button" onclick="resetForm()">
-         <img src="https://cdn-icons-png.flaticon.com/512/2618/2618245.png" alt="Reset" class="reset-icon">
-        </button>
-    </h2>
-    <form>
-        <label for="p">P:</label>
-        <input type="number" name="p" id="p">
-        <label for="q">Q:</label>
-        <input type="number" name="q" id="q">
-        <label for="e">E:</label>
-        <input type="number" name="e" id="e">
-        <button type="button" id="generate-button" onclick="createLabelAndInput()">Generate</button>
-    </form>
+
+    <div class="login-box">
+        <h2>
+            Generate RSA
+        </h2>
+        <form>
+            <div class="user-box" id="my-form">
+                <input class="user-box" type="number" name="p" id="p">
+                <label for="p">Enter P:</label>
+            </div>
+            <div class="user-box">
+                <input class="user-box" type="number" name="q" id="q">
+                <label for="p">Enter Q:</label>
+            </div>
+            <div class="user-box">
+                <input class="user-box" type="number" name="e" id="e">
+                <label for="p">Enter E:</label>
+            </div>
+            <a href="#" id="generate-button" onclick="createLabelAndInput()">
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                Generate
+            </a>
+        </form>
+    </div>
 </body>
 </html>
