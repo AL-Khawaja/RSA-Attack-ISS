@@ -15,14 +15,26 @@ function gcd(a, b) {
     return gcd(b, a % b);
 }
 
+function areCoprime(a, b) {
+    return gcd(a, b) === 1;
+}
+
 function createLabelAndInput() {
     $('#generate-button').hide();
     var p = parseInt($('#p').val());
     var q = parseInt($('#q').val());
-    var e = parseInt($('#e').val());
+    var phi = (p - 1) * (q - 1);
+    var e;
+
+    // randomly chose e between 1 and phi
+    do {
+        e = Math.floor(Math.random() * phi) + 1;
+    } while (!areCoprime(e, phi));
+    console.log(e);
+
 
     if (!p || !q || !e) {
-        alert("P, Q, and E must be set");
+        alert("P, Q");
         $('#generate-button').show();
         return;
     } else if (p == q) {
@@ -33,12 +45,8 @@ function createLabelAndInput() {
         alert("Choose larger prime numbers");
         $('#generate-button').show();
         return;
-    } else if (!isPrime(p) || !isPrime(q) || !isPrime(e)) {
-        alert("P, Q, and E must be prime numbers");
-        $('#generate-button').show();
-        return;
-    } else if (gcd(e, (p - 1) * (q - 1)) !== 1) {
-        alert("E must be coprime with Φ(n) which is (p - 1) * (q - 1) = " + (p - 1) * (q - 1));
+    } else if (!isPrime(p) || !isPrime(q)) {
+        alert("P, Q must be prime numbers");
         $('#generate-button').show();
         return;
     }
@@ -47,13 +55,17 @@ function createLabelAndInput() {
     $.ajax({
         type: 'POST',
         url: '/generate',
-        data: $('form').serialize(),
+        data: $('form').serialize() + '&e=' + e,
         success: function(data) {
             // Create a container div
             var containerDiv = $("<div>", { class: "container" });
     
             // Make a form for encryption
             var encryptionForm = $("<form>", { class: "encryption-form" });
+            var label_for_e = $("<label>", { text: "E value is:", class: "label" });
+            var span_for_e = $("<span>", { text: e, class: "result-value" });
+            var label_for_phi = $("<label>", { text: "φ(n):", class: "label" });
+            var span_for_phi = $("<span>", { text: (p-1)*(q-1), class: "result-value" });
             var public_key_label = $("<label>", { text: "Public Key:", class: "label" });
             var public_key_value = $("<span>", { text: data.public_key, class: "result-value" });
             var private_key_label = $("<label>", { text: "Private Key:", class: "label" });
@@ -62,7 +74,8 @@ function createLabelAndInput() {
             var inputField = $("<textarea>", { name: "text" });
     
             // Append elements to form
-            encryptionForm.append(public_key_label, public_key_value, $("<br>"));
+            encryptionForm.append(label_for_phi,span_for_phi,$("<br>"));
+            encryptionForm.append(label_for_e,span_for_e,$("<br>"),$("<br>"),public_key_label, public_key_value, $("<br>"));
             encryptionForm.append(private_key_label, private_key_value, $("<br>"),$("<br>"),$("<br>"));
             encryptionForm.append(inputLabel,$("<br>"),$("<br>"),inputField,$("<br>"));
     
