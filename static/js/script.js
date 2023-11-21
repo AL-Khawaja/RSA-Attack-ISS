@@ -29,7 +29,7 @@ function createLabelAndInput() {
         alert("P and Q cannot be equal to each other");
         $('#generate-button').show();
         return;
-    } else if (p < 43 || q < 43 || e < 43) {
+    } else if (p < 43 || q < 43 ) {
         alert("Choose larger prime numbers");
         $('#generate-button').show();
         return;
@@ -38,10 +38,11 @@ function createLabelAndInput() {
         $('#generate-button').show();
         return;
     } else if (gcd(e, (p - 1) * (q - 1)) !== 1) {
-        alert("E must be coprime with (P - 1) * (Q - 1)");
+        alert("E must be coprime with Φ(n) which is (p - 1) * (q - 1) = " + (p - 1) * (q - 1));
         $('#generate-button').show();
         return;
     }
+
 
     $.ajax({
         type: 'POST',
