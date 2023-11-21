@@ -195,4 +195,36 @@ body {
 	height: auto;
 	padding: 8px;
 	box-shadow: 0px 4px 10px -8px black;
+  max-width: 600px; 
+}
+
+.encryption-form label,
+.decryption-form label,
+.result-label{
+  top:0;
+  left: 0;
+  padding: 10px 0;
+  font-size: 16px;
+  color: #03e9f4;
+  pointer-events: none;
+  transition: .5s;
+}
+
+
+button{
+  font-family: comic sans ms;
+  display: inline-block;
+  font-size: 1em;
+  padding: 0.5em 1em;
+  -webkit-appearance: none;
+  appearance: none;
+  background-color: #0e141e; /* Replaced $button-bg */
+  color: #fff; /* Replaced $button-text-color */
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  position: relative;
+  transition: transform ease-in 0.1s, box-shadow ease-in 0.25s;
+  box-shadow: 0 2px 25px #00f1ff;
+  margin-top: 10px;
 }

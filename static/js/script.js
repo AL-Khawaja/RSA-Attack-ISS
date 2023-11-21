@@ -64,7 +64,7 @@ function createLabelAndInput() {
             // Append elements to form
             encryptionForm.append(public_key_label, public_key_value, $("<br>"));
             encryptionForm.append(private_key_label, private_key_value, $("<br>"),$("<br>"),$("<br>"));
-            encryptionForm.append(inputLabel, inputField,$("<br>"));
+            encryptionForm.append(inputLabel,$("<br>"),$("<br>"),inputField,$("<br>"));
     
             // Encrypt button
             var encryptButton = $("<button>", { type: "button", text: "Encrypt", class: "encrypt-button", id: "encrypt-button" });
@@ -82,13 +82,13 @@ function createLabelAndInput() {
                         var resultValue = $("<textarea>", { text: data.encrypted_text, class: "result-value" });
                         var lineBreak = $("<br>");
     
-                        containerDiv.append(resultLabel, resultValue, lineBreak,$("<br>"),$("<br>"));
+                        containerDiv.append(resultLabel,$("<br>"),$("<br>"),resultValue, lineBreak,$("<br>"),$("<br>"));
     
                         // Form for decryption
-                        var decryptionForm = $("<form>");
+                        var decryptionForm = $("<form>",{ class: "decryption-form" });
                         var decryptionLabel = $("<label>", { text: "Encrypted Text to Decrypt:" });
                         var decryptionField = $("<textarea>", { name: "encrypted_text" });
-                        decryptionForm.append(decryptionLabel, decryptionField);
+                        decryptionForm.append(decryptionLabel, $("<br>"),$("<br>"),decryptionField);
     
                         // Decrypt button
                         var decryptButton = $("<button>", { type: "button", text: "Decrypt", class: "decrypt-button", id: "decrypt-button" });
@@ -106,7 +106,7 @@ function createLabelAndInput() {
                                     var decryptedValue = $("<textarea>", { text: data.decrypted_text, class: "result-value",disabled: true });
                                     var lineBreak2 = $("<br>");
     
-                                    containerDiv.append($("<br>"),$("<br>"),decryptedLabel, decryptedValue, lineBreak2);
+                                    containerDiv.append($("<br>"),$("<br>"),decryptedLabel,$("<br>"),$("<br>"), decryptedValue, lineBreak2);
                                 }
                             });
                         });
@@ -119,7 +119,7 @@ function createLabelAndInput() {
     
             containerDiv.append(encryptionForm, $("<br>"));
 
-            var refreshButton = $("<button>", {text: "Refresh Page",class: "refresh-button",
+            var refreshButton = $("<button>", {text: "Refresh Page",class: "refresh-button",id: "refresh-button",
                 click: function() {
                     location.reload();
                 }
