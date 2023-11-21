@@ -19,6 +19,15 @@ function areCoprime(a, b) {
     return gcd(a, b) === 1;
 }
 
+//function to transfer to character to unicode in hex
+function textToHex(str) {
+    var hex = '';
+    for(var i=0;i<str.length;i++) {
+        hex += ''+str.charCodeAt(i).toString(16);
+    }
+    return hex;
+}
+
 function createLabelAndInput() {
     $('#generate-button').hide();
     var p = parseInt($('#p').val());
@@ -91,11 +100,15 @@ function createLabelAndInput() {
                     url: '/encrypt',
                     data: encryptionForm.serialize(),
                     success: function(data) {
+                        //transfer inputField to unicode in hex
+                        var textv = textToHex(inputField.val());
+                        var textLabel = $("<label>", { text: "Text in Hex:", class: "result-label" });
+                        var textValue = $("<span>", { text: "0x"+textv, class: "result-value" });
                         var resultLabel = $("<label>", { text: "Encrypted Text:", class: "result-label" });
                         var resultValue = $("<textarea>", { text: data.encrypted_text, class: "result-value" });
                         var lineBreak = $("<br>");
     
-                        containerDiv.append(resultLabel,$("<br>"),$("<br>"),resultValue, lineBreak,$("<br>"),$("<br>"));
+                        containerDiv.append(textLabel,textValue,$("<br>"),$("<br>"),resultLabel,$("<br>"),$("<br>"),resultValue, lineBreak,$("<br>"),$("<br>"));
     
                         // Form for decryption
                         var decryptionForm = $("<form>",{ class: "decryption-form" });
