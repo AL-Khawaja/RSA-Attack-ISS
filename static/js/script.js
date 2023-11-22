@@ -19,31 +19,26 @@ function areCoprime(a, b) {
     return gcd(a, b) === 1;
 }
 
-//function to transfer to character to unicode in hex
-function textToHex(str) {
-    var hex = '';
-    for(var i=0;i<str.length;i++) {
-        hex += ''+str.charCodeAt(i).toString(16);
+//function that transfer every character to hex in its own
+function textToHex(text) {
+    var result = "";
+    for (var i = 0; i < text.length; i++) {
+        result += "0x" + text.charCodeAt(i).toString(16);
+        if (i < text.length - 1) {
+            result += "0x";
+        }
     }
-    return hex;
+    return result;
 }
 
 function createLabelAndInput() {
     $('#generate-button').hide();
     var p = parseInt($('#p').val());
     var q = parseInt($('#q').val());
-    var phi = (p - 1) * (q - 1);
-    var e;
-
-    // randomly chose e between 1 and phi
-    do {
-        e = Math.floor(Math.random() * phi) + 1;
-    } while (!areCoprime(e, phi));
-    console.log(e);
-
-
-    if (!p || !q || !e) {
-        alert("P, Q");
+    
+    // Check if there is a val for p and q
+    if (isNaN(p) || isNaN(q)) {
+        alert("P and Q must be set");
         $('#generate-button').show();
         return;
     } else if (p == q) {
@@ -59,6 +54,15 @@ function createLabelAndInput() {
         $('#generate-button').show();
         return;
     }
+
+    var phi = (p - 1) * (q - 1);
+    var e;
+
+    // randomly chose e between 1 and phi
+    do {
+        e = Math.floor(Math.random() * phi) + 1;
+    } while (!areCoprime(e, phi));
+    console.log(e);
 
 
     $.ajax({
@@ -103,7 +107,7 @@ function createLabelAndInput() {
                         //transfer inputField to unicode in hex
                         var textv = textToHex(inputField.val());
                         var textLabel = $("<label>", { text: "Text in Hex:", class: "result-label" });
-                        var textValue = $("<span>", { text: "0x"+textv, class: "result-value" });
+                        var textValue = $("<span>", { text: textv, class: "result-value" });
                         var resultLabel = $("<label>", { text: "Encrypted Text:", class: "result-label" });
                         var resultValue = $("<textarea>", { text: data.encrypted_text, class: "result-value" });
                         var lineBreak = $("<br>");
