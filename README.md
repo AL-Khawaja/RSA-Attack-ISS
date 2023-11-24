@@ -4,11 +4,13 @@
 ## Description
 
 This project is an implementation of the RSA algorithm, demonstrating its functionality and potential vulnerabilities. It includes a web interface for interaction with the RSA system.
+Follow this [link](https://github.com/AL-Khawaja/RSA-Keypair-Generation-Encryption-Decryption-) to check the repository in GitHub.
+
 
 ## Prerequisites
 
 Before you begin, ensure you have met the following requirements:
-- Python: The project is developed in Python. If you do not have Python installed, download and install it from [python.org](https://www.python.org/downloads/) or just download it from microsoft store by click on the following link [Microsoft store python 3.9](https://www.microsoft.com/store/productId/9P7QFQMJRFP7?ocid=pdpshare). 
+- Python: The project is developed in Python. If you do not have Python installed, download and install it from [python.org](https://www.python.org/downloads/) or just download it from Microsoft store by click on the following link [Microsoft store python 3.9](https://www.microsoft.com/store/productId/9P7QFQMJRFP7?ocid=pdpshare). 
 
 - Flask: This project uses Flask, a web framework for Python. After installing Python:
 ##### install Flask using pip:
@@ -22,7 +24,7 @@ Clone the repository:
 
 Navigate to the project directory:
 
->cd RSA-Attack-ISS
+>cd RSA-Keypair-Generation-Encryption-Decryption-
 
 ## Usage
 Start the application: 
