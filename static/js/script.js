@@ -21,9 +21,9 @@ function areCoprime(a, b) {
 
 //function that transfer every character to hex in its own
 function textToHex(text) {
-    var result = "";
+    var result = ""
     for (var i = 0; i < text.length; i++) {
-        result += "0x" + text.charCodeAt(i).toString(16);
+        result +=  text.charCodeAt(i).toString(16);
         if (i < text.length - 1) {
             result += "0x";
         }
@@ -106,8 +106,8 @@ function createLabelAndInput() {
                     success: function(data) {
                         //transfer inputField to unicode in hex
                         var textv = textToHex(inputField.val());
-                        var textLabel = $("<label>", { text: "Text in Hex:", class: "result-label" });
-                        var textValue = $("<span>", { text: textv, class: "result-value" });
+                        var textLabel = $("<label>", { text: "Text in Hex: ", class: "result-label" });
+                        var textValue = $("<span>", { text: "0x" +textv , class: "result-value" });
                         var resultLabel = $("<label>", { text: "Encrypted Text:", class: "result-label" });
                         var resultValue = $("<textarea>", { text: data.encrypted_text, class: "result-value" });
                         var lineBreak = $("<br>");
