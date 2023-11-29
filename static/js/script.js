@@ -21,7 +21,7 @@ function areCoprime(a, b) {
 
 //function that transfer every character to hex in its own
 function textToHex(text) {
-    var result = ""
+    var result = "";
     for (var i = 0; i < text.length; i++) {
         result +=  text.charCodeAt(i).toString(16);
         if (i < text.length - 1) {
