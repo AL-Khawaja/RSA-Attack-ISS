@@ -38,13 +38,9 @@ def encrypt():
 def decrypt():
     encrypted_text = request.form['encrypted_text']
 
-    decrypted_text = RSA.decrypt(encrypted_text, private_key, public_key)
+    decrypted_text = RSA.decrypt(encrypted_text, private_key)
 
     return jsonify({'decrypted_text': decrypted_text})
 
-#local
 if __name__ == "__main__":
     app.run(debug=True)
-#online
-# if __name__ == "__main__":
-#     app.run(debug=False,host='0.0.0.0')

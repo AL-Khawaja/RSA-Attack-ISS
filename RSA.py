@@ -1,8 +1,8 @@
 def generate_keys(p, q, e):
     n = p * q
     phi = (p - 1) * (q - 1)
-    d = e ** -1 % phi 
-    return (hex(e), hex(n)), (hex(d), hex(phi))
+    d = pow(e, -1, phi)
+    return (hex(e), hex(n)), (hex(d), hex(n))
 
 
 def encrypt(plain_text, public_key):
@@ -11,28 +11,25 @@ def encrypt(plain_text, public_key):
 
     unicode_values = []
     for char in plain_text:
-        unicode_values.append(hex(ord(char) ** p1% p2))
+        unicode_values.append(hex(pow(ord(char), p1, p2)))
 
     encrypted_text = ''.join(str(v) for v in unicode_values)
 
     return encrypted_text
 
 
-def decrypt(cipher_text, private_key, public_key):
+def decrypt(text, private_key):
     p1 = int(private_key[0], base=16)
-    p2 = int(public_key[1], base=16)
+    p2 = int(private_key[1], base=16)
 
     decrypted_text = text.split("0x")
     decrypted_text = decrypted_text[1:]
 
-    text = ""
+    final_text = ""
     for char in decrypted_text:
         char = int(char, base=16)
-        char = int(char) ** p1%p2
+        char = pow(int(char), p1, p2)
         char = chr(char)
-        text += char
+        final_text += char
 
-    return text
-
-
-
+    return final_text   
